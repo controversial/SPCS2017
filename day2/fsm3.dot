@@ -1,0 +1,12 @@
+digraph {
+    label="Predator"; labelloc="top"; fontcolor="blue"; fontsize="15"; fontname="sans-serif";
+    wander; chase; flee; eat; death;
+    wander -> chase [label="See smaller animal"];
+    wander -> flee [label="See bigger animal"];
+    flee -> wander [label="Successful escape"];
+    chase -> eat [label="Catch"];
+    eat -> wander;
+    flee -> death [label="Caught"];
+    chase -> wander [label="Prey escapes"];
+    chase -> flee [label="Another animal appears"];
+}

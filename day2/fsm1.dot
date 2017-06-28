@@ -1,0 +1,8 @@
+digraph {
+    label="Obstacle avoidance robot"; labelloc="top"; fontcolor="blue"; fontsize="15"; fontname="sans-serif";
+    forward[label="Move forward"]; left[label="Turn left"];
+    forward->forward[label="No obstacle"];
+    forward->left[label="Obstacle detected\n"];
+    left->forward[label="No obstacle detected\n"];
+    left->left[label="Obstacle detected"];
+}

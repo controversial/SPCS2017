@@ -1,0 +1,9 @@
+digraph {
+    label="Animal foraging and avoiding danger"; labelloc="top"; fontcolor="blue"; fontsize="15"; fontname="sans-serif";
+    forage[label="Search for food"]; wander[label="Wander"]; run[label="Run away"];
+    wander->forage[label="Hungry"];
+    forage->wander[label="Found food"];
+    wander->run[label="Threatened"];
+    forage->run[label="Threatened"];
+    run->wander[label="Escaped"];
+}
