@@ -261,8 +261,6 @@ class MinimaxAgent(MultiAgentSearchAgent):
             for ghostNumber in range(1, state.getNumAgents()):
                 for legalAction in state.getLegalActions(ghostNumber):
                     next_actions.append((ghostNumber, legalAction))
-            # Stopping is always a choice even when the program says it's not
-            if len(next_actions) == 0: next_actions.insert(0, Directions.STOP)
             if depth <= self.depth and not (state.isWin() or state.isLose()):
                 # Make a game state for each of the actions we could take
                 next_states = [state.generateSuccessor(actor, action) for actor, action in next_actions]
