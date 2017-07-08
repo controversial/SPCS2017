@@ -1,4 +1,6 @@
 .DS_Store
+pacman/*
+!pacman/submission.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
