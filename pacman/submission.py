@@ -237,7 +237,47 @@ class MinimaxAgent(MultiAgentSearchAgent):
         "stop."
         """
 
-        raise NotImplementedError()
+        def max_agent(state, depth):
+            """Calculate the best move that pacman could make."""
+            next_actions = state.getLegalActions(0)
+            # Stopping is always a choice even when the program says it's not
+            if len(next_actions) == 0: next_actions.append(Directions.STOP)
+            # Call min agent if the game is running and we're not at depth
+            if depth <= self.depth and not (state.isWin() or state.isLose()):
+                # Make a game state for each of the actions we could take
+                next_states = [state.generateSuccessor(0, action) for action in next_actions]
+                next_scores = [min_agent(state, depth + 1)[0] for state in next_states]
+                m = max(next_scores)
+                return m, next_scores.index(m)
+            # Otherwise use score
+            else:
+                return self.evaluationFunction(state), 0
+
+
+        def min_agent(state, depth):
+            """Calculate the worst move that each of the ghosts could make."""
+            # Record the possible next steps for each agent in a list of tuples
+            next_actions = []
+            for ghostNumber in range(1, state.getNumAgents()):
+                for legalAction in state.getLegalActions(ghostNumber):
+                    next_actions.append((ghostNumber, legalAction))
+            # Stopping is always a choice even when the program says it's not
+            if len(next_actions) == 0: next_actions.append(Directions.STOP)
+            if depth <= self.depth and not (state.isWin() or state.isLose()):
+                # Make a game state for each of the actions we could take
+                next_states = [state.generateSuccessor(actor, action) for actor, action in next_actions]
+                next_scores = [max_agent(state, depth + 1)[0] for state in next_states]
+                m = min(next_scores)
+                return m, next_scores.index(m)
+            else:
+                return self.evaluationFunction(state), 0
+
+        index_of_best_move = max_agent(gameState, 0)[1]
+
+        next_actions = gameState.getLegalActions(0)
+        if len(next_actions) == 0: next_actions.append(Directions.STOP)
+
+        return next_actions[index_of_best_move]
 
 
 ###############################################################################
