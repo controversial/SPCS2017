@@ -241,7 +241,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
             """Calculate the best move that pacman could make."""
             next_actions = state.getLegalActions(0)
             # Stopping is always a choice even when the program says it's not
-            if len(next_actions) == 0: next_actions.append(Directions.STOP)
+            if len(next_actions) == 0: next_actions.insert(0, Directions.STOP)
             # Call min agent if the game is running and we're not at depth
             if depth <= self.depth and not (state.isWin() or state.isLose()):
                 # Make a game state for each of the actions we could take
@@ -262,7 +262,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
                 for legalAction in state.getLegalActions(ghostNumber):
                     next_actions.append((ghostNumber, legalAction))
             # Stopping is always a choice even when the program says it's not
-            if len(next_actions) == 0: next_actions.append(Directions.STOP)
+            if len(next_actions) == 0: next_actions.insert(0, Directions.STOP)
             if depth <= self.depth and not (state.isWin() or state.isLose()):
                 # Make a game state for each of the actions we could take
                 next_states = [state.generateSuccessor(actor, action) for actor, action in next_actions]
@@ -275,7 +275,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
         index_of_best_move = max_agent(gameState, 0)[1]
 
         next_actions = gameState.getLegalActions(0)
-        if len(next_actions) == 0: next_actions.append(Directions.STOP)
+        if len(next_actions) == 0: next_actions.insert(0, Directions.STOP)
 
         return next_actions[index_of_best_move]
 
