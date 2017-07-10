@@ -360,12 +360,12 @@ class FinalAgent(MultiAgentSearchAgent):
         # Build a graph from the list of path tiles
         self.pathGraph = Graph(self.pathNodes)
         # Connect adjacent path tiles in the graph
-        for i, (x, y) in enumerate(self.pathCoords):
+        for x, y in self.pathCoords:
             neighbors = [(x-1, y), (x+1, y), (x, y-1), (x, y+1)]
             for neighbor in neighbors:
                 if neighbor in self.pathCoords:
-                    this = self.pathNodes[i]
-                    other = self.pathNodes[self.pathCoords.index(neighbor)]
+                    this = self.getPathNode(x, y)
+                    other = self.getPathNode(*neighbor)
                     self.pathGraph.add_connection(this, other)
 
     def getPathNode(self, x, y):
