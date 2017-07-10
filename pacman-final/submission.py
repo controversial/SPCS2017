@@ -334,7 +334,10 @@ def run_dijkstra(graph, start, end):
 
 
 class FinalAgent(MultiAgentSearchAgent):
-    def __init__(self, gameState):
+    def __init__(self):
+        self.initialized = False
+
+    def initialize(self, gameState):
         w = gameState.data.layout.width
         h = gameState.data.layout.height
         self.layoutCoords = [(x, y) for x in range(w) for y in range(h)]
@@ -357,8 +360,10 @@ class FinalAgent(MultiAgentSearchAgent):
                     self.pathGraph.add_connection(this, other)
 
     def getAction(self, gameState):
-        data = gameState.data
-        layout = data.layout
+        if not self.initialized:
+            self.initialize(gameState)
+            self.initialized = True
+
         # layout.food.asList()
         # layout.walls.asList()
         # state.getGhostPositions() -> list of tuples
@@ -366,6 +371,5 @@ class FinalAgent(MultiAgentSearchAgent):
         # state.getCapsules() -> list of tuples
         # state.getFood().asList() -> list of tuples
         # state.getWalls().asList() -> list of tuples
-
 
         return Directions.STOP
