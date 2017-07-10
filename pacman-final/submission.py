@@ -368,10 +368,19 @@ class FinalAgent(MultiAgentSearchAgent):
                     other = self.pathNodes[self.pathCoords.index(neighbor)]
                     self.pathGraph.add_connection(this, other)
 
+    def getPathNode(self, x, y):
+        if (x, y) in self.pathCoords:
+            return self.pathNodes[self.pathCoords.index((x, y))]
+        else:
+            raise IndexError("{0} is not a path node".format((x, y)))
+
     def getAction(self, gameState):
         if not self.initialized:
             self.initialize(gameState)
             self.initialized = True
+
+        data = gameState.data
+        layout = data.layout
 
         # layout.food.asList()
         # layout.walls.asList()
