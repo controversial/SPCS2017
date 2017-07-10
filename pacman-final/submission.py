@@ -292,14 +292,23 @@ class Graph:
     def __init__(self, nodes):
         self.neighbors = dict(zip(nodes, [{} for _ in nodes]))
 
-    def __iter__(self):
-        return iter(self.neighbors.keys())
-
     def add_connection(self, a, b, cost=1):
         self.neighbors[a][b] = cost
         self.neighbors[b][a] = cost
         a.neighbors = self.neighbors[a]
         b.neighbors = self.neighbors[b]
+
+    def __iter__(self):
+        return iter(self.neighbors.keys())
+
+    def __str__(self):
+        out = ""
+        for n in self.neighbors:
+            out += str(n)
+            out += ": "
+            out += str([str(l) for l in self.neighbors[n]])
+            out += "\n"
+        return out
 
 
 def run_dijkstra(graph, start, end):
