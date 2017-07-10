@@ -331,3 +331,8 @@ def run_dijkstra(graph, start, end):
             break
     path.reverse()
     return path
+
+
+class FinalAgent(MultiAgentSearchAgent):
+    def getAction(self, gameState):
+        pass
