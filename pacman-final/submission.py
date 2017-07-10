@@ -374,6 +374,13 @@ class FinalAgent(MultiAgentSearchAgent):
         else:
             raise IndexError("{0} is not a path node".format((x, y)))
 
+    def pathFind(self, a, b):
+        return run_dijkstra(
+            self.pathGraph,
+            self.getPathNode(*a),
+            self.getPathNode(*b)
+        )
+
     def getAction(self, gameState):
         if not self.initialized:
             self.initialize(gameState)
