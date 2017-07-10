@@ -357,4 +357,15 @@ class FinalAgent(MultiAgentSearchAgent):
                     self.pathGraph.add_connection(this, other)
 
     def getAction(self, gameState):
+        data = gameState.data
+        layout = data.layout
+        # layout.food.asList()
+        # layout.walls.asList()
+        # state.getGhostPositions() -> list of tuples
+        # state.getPacmanPosition() -> tuple
+        # state.getCapsules() -> list of tuples
+        # state.getFood().asList() -> list of tuples
+        # state.getWalls().asList() -> list of tuples
+
+
         return Directions.STOP
