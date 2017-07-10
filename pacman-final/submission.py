@@ -310,36 +310,35 @@ class Graph:
             out += "\n"
         return out
 
+    def dijkstra(self, start, end):
+        if start not in self or end not in self:
+            raise ValueError(
+                'Both the start and nodes must be in the provided graph'
+            )
+        visited = set()
+        unvisited = set(self)
 
-def run_dijkstra(graph, start, end):
-    if start not in graph or end not in graph:
-        raise ValueError(
-            'Both the start and nodes must be in the provided graph'
-        )
-    visited = set()
-    unvisited = set(graph)
-
-    start.distance = 0
-    while end.distance == float('inf'):
-        current = min(unvisited, key=lambda x: x.distance)
-        unvisited.remove(current)
-        visited.add(current)
-        adjs = current.neighbors.keys()
-        for a in adjs:
-            tentativeDistance = current.distance+current.neighbors[a]
-            if tentativeDistance < a.distance:
-                a.distance = tentativeDistance
-                a.prev_node = current
-    path = [end]
-    # Trace path back to beginning
-    while 1:
-        current = path[-1]
-        if current.prev_node:
-            path.append(current.prev_node)
-        elif current == start:
-            break
-    path.reverse()
-    return path
+        start.distance = 0
+        while end.distance == float('inf'):
+            current = min(unvisited, key=lambda x: x.distance)
+            unvisited.remove(current)
+            visited.add(current)
+            adjs = current.neighbors.keys()
+            for a in adjs:
+                tentativeDistance = current.distance+current.neighbors[a]
+                if tentativeDistance < a.distance:
+                    a.distance = tentativeDistance
+                    a.prev_node = current
+        path = [end]
+        # Trace path back to beginning
+        while 1:
+            current = path[-1]
+            if current.prev_node:
+                path.append(current.prev_node)
+            elif current == start:
+                break
+        path.reverse()
+        return path
 
 
 class FinalAgent(MultiAgentSearchAgent):
@@ -375,8 +374,7 @@ class FinalAgent(MultiAgentSearchAgent):
             raise IndexError("{0} is not a path node".format((x, y)))
 
     def pathFind(self, a, b):
-        return run_dijkstra(
-            self.pathGraph,
+        return self.pathGraph.dijkstra(
             self.getPathNode(*a),
             self.getPathNode(*b)
         )
