@@ -394,6 +394,15 @@ class FinalAgent(MultiAgentSearchAgent):
                 len(self.pathfindFromPacman(*loc))
         )
 
+    def getClosestGhostToPacman(self):
+        # Return smallest element of self.gameState.getFood() by comparing
+        # number of steps in shortest path
+        return min(
+            self.gameState.getGhostPositions(),
+            key=lambda loc:
+                len(self.pathfindFromPacman(*loc))
+        )
+
     def getAction(self, gameState):
         self.gameState = gameState
 
