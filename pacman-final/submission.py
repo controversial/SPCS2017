@@ -271,3 +271,63 @@ class MinimaxAgent(MultiAgentSearchAgent):
         if len(next_actions) == 0: next_actions.insert(0, Directions.STOP)
 
         return next_actions[index_of_best_move]
+
+
+class GraphNode:
+    def __init__(self, name='Node'):
+        self.graph = None  # parent graph
+        self.neighbors = {}  # adjacent nodes
+        self.distance = float('inf')  # distance from node is infinity
+        self.prev_node = None
+        self.id = name
+
+    def __float__(self):
+        return float(self.distance)
+
+    def __str__(self):
+        return str(self.id)
+
+
+class Graph:
+    def __init__(self, nodes):
+        self.neighbors = dict(zip(nodes, [{} for _ in nodes]))
+
+    def __iter__(self):
+        return iter(self.neighbors.keys())
+
+    def add_connection(self, a, b, cost=1):
+        self.neighbors[a][b] = cost
+        self.neighbors[b][a] = cost
+        a.neighbors = self.neighbors[a]
+        b.neighbors = self.neighbors[b]
+
+
+def run_dijkstra(graph, start, end):
+    if start not in graph or end not in graph:
+        raise ValueError(
+            'Both the start and nodes must be in the provided graph'
+        )
+    visited = set()
+    unvisited = set(graph)
+
+    start.distance = 0
+    while end.distance == float('inf'):
+        current = min(unvisited, key=lambda x: x.distance)
+        unvisited.remove(current)
+        visited.add(current)
+        adjs = current.neighbors.keys()
+        for a in adjs:
+            tentativeDistance = current.distance+current.neighbors[a]
+            if tentativeDistance < a.distance:
+                a.distance = tentativeDistance
+                a.prev_node = current
+    path = [end]
+    # Trace path back to beginning
+    while 1:
+        current = path[-1]
+        if current.prev_node:
+            path.append(current.prev_node)
+        elif current == start:
+            break
+    path.reverse()
+    return path
