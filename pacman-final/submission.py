@@ -334,5 +334,27 @@ def run_dijkstra(graph, start, end):
 
 
 class FinalAgent(MultiAgentSearchAgent):
+    def __init__(self, gameState):
+        w = gameState.data.layout.width
+        h = gameState.data.layout.height
+        self.layoutCoords = [(x, y) for x in range(w) for y in range(h)]
+        # Add to a list all the coordinates of the path tiles.
+        self.pathCoords = []
+        for x, y in self.layoutCoords:
+            if not gameState.getWalls()[x][y]:
+                self.pathCoords.append((x, y))
+        # Make a GraphNode for each path coordinate
+        self.pathNodes = [GraphNode(coord) for coord in self.pathCoords]
+        # Build a graph from the list of path tiles
+        self.pathGraph = Graph(self.pathNodes)
+        # Connect adjacent path tiles in the graph
+        for i, (x, y) in enumerate(self.pathCoords):
+            neighbors = [(x-1, y), (x+1, y), (x, y-1), (x, y+1)]
+            for neighbor in neighbors:
+                if neighbor in self.pathCoords:
+                    this = self.pathNodes[i]
+                    other = self.pathNodes[self.pathCoords.index(neighbor)]
+                    self.pathGraph.add_connection(this, other)
+
     def getAction(self, gameState):
-        pass
+        return Directions.STOP
