@@ -373,13 +373,21 @@ class FinalAgent(MultiAgentSearchAgent):
         else:
             raise IndexError("{0} is not a path node".format((x, y)))
 
-    def pathFind(self, a, b):
+    def pathfind(self, a, b):
         return self.pathGraph.dijkstra(
             self.getPathNode(*a),
             self.getPathNode(*b)
         )
 
+    def pathfindFromPacman(self, x, y):
+        return self.pathfind(
+            self.gameState.getPacmanPosition(),
+            (x, y)
+        )
+
     def getAction(self, gameState):
+        self.gameState = gameState
+
         if not self.initialized:
             self.initialize(gameState)
             self.initialized = True
@@ -387,8 +395,7 @@ class FinalAgent(MultiAgentSearchAgent):
         data = gameState.data
         layout = data.layout
 
-        # layout.food.asList()
-        # layout.walls.asList()
+        # COORDS ARE FROM BOTTOM LEFT
         # state.getGhostPositions() -> list of tuples
         # state.getPacmanPosition() -> tuple
         # state.getCapsules() -> list of tuples
