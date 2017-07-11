@@ -536,7 +536,10 @@ class Test7PacmanAgent(MultiAgentSearchAgent):
 
         # Decisions!
         optcap = self.getOptimalCapsulePosition()
-        if optcap:
+        if len(self.getScaredGhosts()) > 0:
+            closestScared = self.getClosestScaredGhostToPacman()
+            answer = self.getActionTowards(closestScared)
+        elif optcap:
             answer = self.getActionTowards(optcap)
         else:
             answer = self.getActionTowards(self.getClosestFoodToPacman())
