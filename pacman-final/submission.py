@@ -385,6 +385,16 @@ class FinalAgent(MultiAgentSearchAgent):
             (x, y)
         )
 
+    def manhattan(self, a, b):
+        """Find the manhattan distance between two points."""
+        return abs(a[0] - b[0]) + abs(a[1] - b[1])
+
+    def manhattanFromPacman(self, x, y):
+        return self.manhattan(
+            self.gameState.getPacmanPosition(),
+            (x, y)
+        )
+
     def getClosestFoodToPacman(self):
         # Return smallest element of self.gameState.getFood() by comparing
         # number of steps in shortest path
