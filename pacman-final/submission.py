@@ -404,8 +404,7 @@ class FinalAgent(MultiAgentSearchAgent):
         the board."""
         return min(
             self.gameState.getFood().asList(),
-            key=lambda loc:
-                len(self.pathfindFromPacman(*loc))
+            key=lambda loc: self.manhattanFromPacman(*loc)
         )
 
     def getClosestGhostToPacman(self):
@@ -413,8 +412,7 @@ class FinalAgent(MultiAgentSearchAgent):
         the board."""
         return min(
             self.gameState.getGhostPositions(),
-            key=lambda loc:
-                len(self.pathfindFromPacman(*loc))
+            key=lambda loc: len(self.pathfindFromPacman(*loc))
         )
 
     def getAction(self, gameState):
