@@ -496,6 +496,12 @@ class Test7PacmanAgent(MultiAgentSearchAgent):
                 "No action leads pacman directly to {0}".format(coords)
             )
 
+    def getActionTowards(self, coords):
+        """Get the action that takes pacman towards the provided coordinates"""
+        pathToFood = [x.id for x in self.pathfindFromPacman(*coords)]
+        firstStep = pathToFood[1]  # index 0 is pacman
+        return self.getActionToCoords(firstStep)
+
     def getAction(self, gameState):
         """Decide which action pacman should take"""
         self.gameState = gameState
