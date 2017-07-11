@@ -364,7 +364,7 @@ class Graph:
         return path
 
 
-class FinalAgent(MultiAgentSearchAgent):
+class Test7PacmanAgent(MultiAgentSearchAgent):
     def buildGraph(self, gameState):
         """Rebuild the graph of path squares to pathfind through"""
         w = gameState.data.layout.width
