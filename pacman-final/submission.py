@@ -335,7 +335,7 @@ class Graph:
     def dijkstra(self, start, end):
         if start not in self or end not in self:
             raise ValueError(
-                'Both the start and nodes must be in the provided graph'
+                "Both the start and end nodes must be in the provided graph"
             )
         visited = set()
         unvisited = set(self)
