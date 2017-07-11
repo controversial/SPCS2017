@@ -537,13 +537,15 @@ class Test7PacmanAgent(MultiAgentSearchAgent):
         # Decisions!
         optcap = self.getOptimalCapsulePosition()
         if len(self.getScaredGhosts()) > 0:
+            print("[info] Pathfinding to closest scared ghost")
             closestScared = self.getClosestScaredGhostToPacman()
             answer = self.getActionTowards(closestScared)
         elif optcap:
+            print('[info] Pathfinding towards pellet to eat proximate ghost')
             answer = self.getActionTowards(optcap)
         else:
+            print("[info] Pathfinding towards closest food")
             answer = self.getActionTowards(self.getClosestFoodToPacman())
 
-
-        print("%.4f" % (time.time() - t1))
+        print("[info] Chose move in %.4f seconds" % (time.time() - t1))
         return answer
