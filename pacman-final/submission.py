@@ -435,10 +435,25 @@ class Test7PacmanAgent(MultiAgentSearchAgent):
         )
 
     def getClosestGhostToPacman(self):
-        """Return the (x, y) coordinate of the geographically closest ghost on
-        the board."""
+        """Return the (x, y) coordinate of the closest ghost on the board."""
         return min(
             self.gameState.getGhostPositions(),
+            key=lambda loc: len(self.pathfindFromPacman(*loc))
+        )
+
+    def getScaredGhosts(self):
+        return [
+            self.gameState.getGhostPosition(i)
+            for i in range(1, self.gameState.getNumAgents())
+            if self.gameState.getGhostState(i).scaredTimer > 0
+        ]
+
+    def getClosestScaredGhostToPacman(self):
+        """Return the (x, y) coordinate of the closest scared ghost on the
+        board. Errors if there aren't any, so check getScaredGhosts first."""
+        # List of positions of all ghosts
+        return min(
+            self.getScaredGhosts(),
             key=lambda loc: len(self.pathfindFromPacman(*loc))
         )
 
