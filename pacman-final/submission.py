@@ -442,6 +442,13 @@ class FinalAgent(MultiAgentSearchAgent):
         data = gameState.data
         layout = data.layout
 
+        # MODE 1: pathfind to food
+        def moveTowardsFood():
+            foodLoc = self.getClosestFoodToPacman()
+            pathToFood = [x.id for x in self.pathfindFromPacman(*foodLoc)]
+            firstStep = pathToFood[1]
+            return self.getActionToCoords(firstStep)
+
         # COORDS ARE FROM BOTTOM LEFT
         # state.getGhostPositions() -> list of tuples
         # state.getPacmanPosition() -> tuple
