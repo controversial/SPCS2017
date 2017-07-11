@@ -337,15 +337,14 @@ class Graph:
                 path.append(current.prev_node)
             elif current == start:
                 break
+            else:
+                return []
         path.reverse()
         return path
 
 
 class FinalAgent(MultiAgentSearchAgent):
-    def __init__(self):
-        self.initialized = False
-
-    def initialize(self, gameState):
+    def buildGraph(self, gameState):
         w = gameState.data.layout.width
         h = gameState.data.layout.height
         self.layoutCoords = [(x, y) for x in range(w) for y in range(h)]
@@ -374,6 +373,7 @@ class FinalAgent(MultiAgentSearchAgent):
             raise IndexError("{0} is not a path node".format((x, y)))
 
     def pathfind(self, a, b):
+        self.buildGraph(self.gameState)
         return self.pathGraph.dijkstra(
             self.getPathNode(*a),
             self.getPathNode(*b)
@@ -405,10 +405,6 @@ class FinalAgent(MultiAgentSearchAgent):
 
     def getAction(self, gameState):
         self.gameState = gameState
-
-        if not self.initialized:
-            self.initialize(gameState)
-            self.initialized = True
 
         data = gameState.data
         layout = data.layout
