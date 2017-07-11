@@ -509,13 +509,12 @@ class Test7PacmanAgent(MultiAgentSearchAgent):
         data = gameState.data
         layout = data.layout
 
-
-        # COORDS ARE FROM BOTTOM LEFT
-        # state.getGhostPositions() -> list of tuples
-        # state.getPacmanPosition() -> tuple
-        # state.getCapsules() -> list of tuples
-        # state.getFood().asList() -> list of tuples
-        # state.getWalls().asList() -> list of tuples
+        # NOTE: COORDS ARE FROM BOTTOM LEFT
+        # NOTE: state.getGhostPositions() -> list of tuples
+        # NOTE: state.getPacmanPosition() -> tuple
+        # NOTE: state.getCapsules() -> list of tuples
+        # NOTE: state.getFood().asList() -> list of tuples
+        # NOTE: state.getWalls().asList() -> list of tuples
 
         t1 = time.time()
 
