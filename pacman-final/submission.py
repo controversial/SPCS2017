@@ -397,8 +397,13 @@ class Test7PacmanAgent(MultiAgentSearchAgent):
             raise IndexError("{0} is not a path node".format((x, y)))
 
     def pathfind(self, a, b):
-        """Find the path between two points"""
+        """Find the path between two points on the grid"""
         self.buildGraph(self.gameState)
+        # When ghosts are scared, they can appear halfway between grid points
+        # because they move slower. Flooring is a simple solution to this
+        # problem.
+        a = (int(a[0]), int(a[1]))
+        b = (int(b[0]), int(b[1]))
         return self.pathGraph.dijkstra(
             self.getPathNode(*a),
             self.getPathNode(*b)
