@@ -1,9 +1,9 @@
+from __future__ import print_function
 from util import manhattanDistance
 from game import Directions
 import random
 import util
 import time
-
 from game import Agent
 
 """
@@ -537,15 +537,15 @@ class Test7PacmanAgent(MultiAgentSearchAgent):
         # Decisions!
         optcap = self.getOptimalCapsulePosition()
         if len(self.getScaredGhosts()) > 0:
-            print("[info] Pathfinding to closest scared ghost")
+            print("Pathfinding to closest scared ghost", end="")
             closestScared = self.getClosestScaredGhostToPacman()
             answer = self.getActionTowards(closestScared)
         elif optcap:
-            print('[info] Pathfinding towards pellet to eat proximate ghost')
+            print("Pathfinding towards pellet to eat proximate ghost", end="")
             answer = self.getActionTowards(optcap)
         else:
-            print("[info] Pathfinding towards closest food")
+            print("Pathfinding towards closest food", end="")
             answer = self.getActionTowards(self.getClosestFoodToPacman())
 
-        print("[info] Chose move in %.4f seconds" % (time.time() - t1))
+        print("... %.4f seconds" % (time.time() - t1))
         return answer
