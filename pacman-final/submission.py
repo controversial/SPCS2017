@@ -2,6 +2,7 @@ from util import manhattanDistance
 from game import Directions
 import random
 import util
+import time
 
 from game import Agent
 
@@ -476,4 +477,8 @@ class Test7PacmanAgent(MultiAgentSearchAgent):
         # state.getCapsules() -> list of tuples
         # state.getFood().asList() -> list of tuples
         # state.getWalls().asList() -> list of tuples
-        return moveTowardsFood()
+
+        t1 = time.time()
+        ans = moveTowardsFood()
+        print("%.4f" % (time.time() - t1))
+        return ans
