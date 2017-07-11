@@ -515,6 +515,7 @@ class Test7PacmanAgent(MultiAgentSearchAgent):
         # NOTE: state.getCapsules() -> list of tuples
         # NOTE: state.getFood().asList() -> list of tuples
         # NOTE: state.getWalls().asList() -> list of tuples
+        # NOTE: if a ghost is scared, state.getGhostState(i).scaredTimer > 0
 
         t1 = time.time()
 
