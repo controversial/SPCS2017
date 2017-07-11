@@ -415,6 +415,26 @@ class FinalAgent(MultiAgentSearchAgent):
             key=lambda loc: len(self.pathfindFromPacman(*loc))
         )
 
+    def getActionToCoords(self, coords):
+        """Get the action that moves pacman to the provided coordinates.
+        Coordinates should be valid path coordinates that are directly
+        adjacent to pacman."""
+        goalX, goalY = coords
+        pacX, pacY = self.gameState.getPacmanPosition()
+
+        if (pacX - 1 == goalX and pacY == goalY):
+            return Directions.WEST
+        if (pacY - 1 == goalY and pacX == goalX):
+            return Directions.SOUTH
+        if (pacX + 1 == goalX and pacY == goalY):
+            return Directions.EAST
+        if (pacY + 1 == goalY and pacX == goalX):
+            return Directions.NORTH
+        else:
+            raise ValueError(
+                "No action leads pacman directly to {0}".format(coords)
+            )
+
     def getAction(self, gameState):
         """Decide which action pacman should take"""
         self.gameState = gameState
