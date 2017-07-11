@@ -455,5 +455,4 @@ class FinalAgent(MultiAgentSearchAgent):
         # state.getCapsules() -> list of tuples
         # state.getFood().asList() -> list of tuples
         # state.getWalls().asList() -> list of tuples
-
-        return Directions.STOP
+        return self.moveTowardsFood()
