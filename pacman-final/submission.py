@@ -442,6 +442,14 @@ class Test7PacmanAgent(MultiAgentSearchAgent):
             key=lambda loc: len(self.pathfindFromPacman(*loc))
         )
 
+    def getClosestCapsuleToPacman(self):
+        """Return the (x, y) coordinate of the geographically closest ghost on
+        the board."""
+        return min(
+            self.gameState.getCapsules(),
+            key=lambda loc: len(self.pathfindFromPacman(*loc))
+        )
+
     def getActionToCoords(self, coords):
         """Get the action that moves pacman to the provided coordinates.
         Coordinates should be valid path coordinates that are directly
