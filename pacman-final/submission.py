@@ -476,4 +476,4 @@ class Test7PacmanAgent(MultiAgentSearchAgent):
         # state.getCapsules() -> list of tuples
         # state.getFood().asList() -> list of tuples
         # state.getWalls().asList() -> list of tuples
-        return self.moveTowardsFood()
+        return moveTowardsFood()
