@@ -345,6 +345,7 @@ class Graph:
 
 class FinalAgent(MultiAgentSearchAgent):
     def buildGraph(self, gameState):
+        """Rebuild the graph of path squares to pathfind through"""
         w = gameState.data.layout.width
         h = gameState.data.layout.height
         self.layoutCoords = [(x, y) for x in range(w) for y in range(h)]
@@ -367,12 +368,14 @@ class FinalAgent(MultiAgentSearchAgent):
                     self.pathGraph.add_connection(this, other)
 
     def getPathNode(self, x, y):
+        """Get a Node object in self.pathGraph for an (x, y) point"""
         if (x, y) in self.pathCoords:
             return self.pathNodes[self.pathCoords.index((x, y))]
         else:
             raise IndexError("{0} is not a path node".format((x, y)))
 
     def pathfind(self, a, b):
+        """Find the path between two points"""
         self.buildGraph(self.gameState)
         return self.pathGraph.dijkstra(
             self.getPathNode(*a),
@@ -380,6 +383,7 @@ class FinalAgent(MultiAgentSearchAgent):
         )
 
     def pathfindFromPacman(self, x, y):
+        """Find the path from pacman to any path point"""
         return self.pathfind(
             self.gameState.getPacmanPosition(),
             (x, y)
@@ -396,8 +400,8 @@ class FinalAgent(MultiAgentSearchAgent):
         )
 
     def getClosestFoodToPacman(self):
-        # Return smallest element of self.gameState.getFood() by comparing
-        # number of steps in shortest path
+        """Return the (x, y) coordinate of the geographically closest food on
+        the board."""
         return min(
             self.gameState.getFood().asList(),
             key=lambda loc:
@@ -405,8 +409,8 @@ class FinalAgent(MultiAgentSearchAgent):
         )
 
     def getClosestGhostToPacman(self):
-        # Return smallest element of self.gameState.getFood() by comparing
-        # number of steps in shortest path
+        """Return the (x, y) coordinate of the geographically closest ghost on
+        the board."""
         return min(
             self.gameState.getGhostPositions(),
             key=lambda loc:
@@ -414,6 +418,7 @@ class FinalAgent(MultiAgentSearchAgent):
         )
 
     def getAction(self, gameState):
+        """Decide which action pacman should take"""
         self.gameState = gameState
 
         data = gameState.data
