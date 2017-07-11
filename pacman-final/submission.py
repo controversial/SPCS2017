@@ -450,6 +450,32 @@ class Test7PacmanAgent(MultiAgentSearchAgent):
             key=lambda loc: len(self.pathfindFromPacman(*loc))
         )
 
+    def getOptimalCapsulePosition(self):
+        """If both pacman and a ghost are near a capsule, return the position of
+        that capsule. Otherwise, return None."""
+        capsulePositions = self.gameState.getCapsules()
+        ghostPositions = self.gameState.getGhostPositions()
+
+        # Build a list of places where pacman, a ghost, and a capsule are all
+        # within 5 spaces of eachother. Includes the ghost and capsule
+        # locations.
+        workingCombos = []
+        for gp in ghostPositions:
+            for cp in capsulePositions:
+                # Is the ghost within 10 spaces of the capsule
+                ghostCapsulePass = len(self.pathfind(gp, cp)) < 10
+                # Is pacman within 10 spaces of the capsule
+                pacmanCapsulePass = len(self.pathfindFromPacman(*cp)) < 10
+                # Is pacman within 10 spaces of the ghost
+                # pacmanGhostPass = len(self.pathfindFromPacman(*gp)) < 10
+                # If all 3 are within 5 of eachother
+                if all([ghostCapsulePass, pacmanCapsulePass]):
+                    workingCombos.append((gp, cp))
+        if len(workingCombos) is 0:
+            return None
+        else:
+            return workingCombos[0][1]
+
     def getActionToCoords(self, coords):
         """Get the action that moves pacman to the provided coordinates.
         Coordinates should be valid path coordinates that are directly
