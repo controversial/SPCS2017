@@ -509,12 +509,6 @@ class Test7PacmanAgent(MultiAgentSearchAgent):
         data = gameState.data
         layout = data.layout
 
-        # MODE 1: pathfind to food
-        def moveTowardsFood():
-            foodLoc = self.getClosestFoodToPacman()
-            pathToFood = [x.id for x in self.pathfindFromPacman(*foodLoc)]
-            firstStep = pathToFood[1]
-            return self.getActionToCoords(firstStep)
 
         # COORDS ARE FROM BOTTOM LEFT
         # state.getGhostPositions() -> list of tuples
@@ -524,6 +518,14 @@ class Test7PacmanAgent(MultiAgentSearchAgent):
         # state.getWalls().asList() -> list of tuples
 
         t1 = time.time()
-        ans = moveTowardsFood()
+
+        # Decisions!
+        optcap = self.getOptimalCapsulePosition()
+        if optcap:
+            answer = self.getActionTowards(optcap)
+        else:
+            answer = self.getActionTowards(self.getClosestFoodToPacman())
+
+
         print("%.4f" % (time.time() - t1))
-        return ans
+        return answer
