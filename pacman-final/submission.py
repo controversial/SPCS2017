@@ -443,14 +443,19 @@ class Test7PacmanAgent(MultiAgentSearchAgent):
             key=lambda loc: self.manhattanFromPacman(*loc, state=state)
         )
 
-    def getClosestGhostToPacman(self, state=None):
-        """Return the (x, y) coordinate of the closest ghost on the board."""
+    def getClosestNonScaredGhostToPacman(self, state=None):
+        """Return the (x, y) coordinate of the closest ghost on the board that
+        isn't scared."""
         if state is None:
             state = self.gameState
-        return min(
-            state.getGhostPositions(),
-            key=lambda loc: len(self.pathfindFromPacman(*loc, state=state))
-        )
+        nonScaredGhosts = set(state.getGhostPositions()) - set(self.getScaredGhosts(state))
+        if len(nonScaredGhosts) == 0:
+            return None
+        else:
+            return min(
+                nonScaredGhosts,
+                key=lambda loc: len(self.pathfindFromPacman(*loc, state=state))
+            )
 
     def getScaredGhosts(self, state=None):
         if state is None:
