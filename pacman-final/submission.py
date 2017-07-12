@@ -4,7 +4,23 @@ from game import Directions
 import random
 import util
 import time
+import math
 from game import Agent
+
+
+oppositeActions = {
+    Directions.NORTH: Directions.SOUTH,
+    Directions.EAST: Directions.WEST,
+    Directions.SOUTH: Directions.NORTH,
+    Directions.WEST: Directions.EAST
+}
+
+counterclockwiseActions = {
+    Directions.NORTH: Directions.WEST,
+    Directions.WEST: Directions.SOUTH,
+    Directions.SOUTH: Directions.EAST,
+    Directions.EAST: Directions.NORTH
+}
 
 """
 General information
@@ -548,24 +564,18 @@ class Test7PacmanAgent(MultiAgentSearchAgent):
         return self.getActionToCoords(firstStep, state)
 
     def getActionAwayFrom(self, coords, state=None):
-        if state is None:
-            state = self.gameState
         """Get the action that takes pacman away from the provided
         coordinates"""
+        if state is None:
+            state = self.gameState
         possibleMoves = state.getLegalActions(0)
         pacX, pacY = state.getPacmanPosition()
-        distanceFromCoords = len(self.pathfindFromPacman(*coords, state=state))
-        for move in possibleMoves:
-            newState = state.generateSuccessor(0, move)
-            newDistanceFromCoords = len(
-                self.pathfindFromPacman(*coords, state=state)
-            )
-            if newDistanceFromCoords > distanceFromCoords:
-                return move
-        else:
-            return random.choice(
-                list(set(possibleMoves) - set(Directions.STOP))
-            )
+        actionTowardsGhost = self.getActionTowards(coords)
+        idealAction = oppositeActions[actionTowardsGhost]
+        action = idealAction
+        while (action not in possibleMoves) or (action == actionTowardsGhost):
+            action = counterclockwiseActions[action]
+        return action
 
     def getAction(self, gameState):
         """Decide which action pacman should take"""
