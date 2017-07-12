@@ -396,9 +396,11 @@ class Test7PacmanAgent(MultiAgentSearchAgent):
         else:
             raise IndexError("{0} is not a path node".format((x, y)))
 
-    def pathfind(self, a, b):
+    def pathfind(self, a, b, state=None):
         """Find the path between two points on the grid"""
-        self.buildGraph(self.gameState)
+        if state is None:
+            state = self.gameState
+        self.buildGraph(state)
         # When ghosts are scared, they can appear halfway between grid points
         # because they move slower. Flooring is a simple solution to this
         # problem.
@@ -409,67 +411,84 @@ class Test7PacmanAgent(MultiAgentSearchAgent):
             self.getPathNode(*b)
         )
 
-    def pathfindFromPacman(self, x, y):
+    def pathfindFromPacman(self, x, y, state=None):
         """Find the path from pacman to any path point"""
+        if state is None:
+            state = self.gameState
         return self.pathfind(
-            self.gameState.getPacmanPosition(),
-            (x, y)
+            state.getPacmanPosition(),
+            (x, y),
+            state
         )
 
     def manhattan(self, a, b):
         """Find the manhattan distance between two points."""
         return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
-    def manhattanFromPacman(self, x, y):
+    def manhattanFromPacman(self, x, y, state=None):
+        if state is None:
+            state = self.gameState
         return self.manhattan(
-            self.gameState.getPacmanPosition(),
+            state.getPacmanPosition(),
             (x, y)
         )
 
-    def getClosestFoodToPacman(self):
+    def getClosestFoodToPacman(self, state=None):
         """Return the (x, y) coordinate of the geographically closest food on
         the board."""
+        if state is None:
+            state = self.gameState
         return min(
-            self.gameState.getFood().asList(),
-            key=lambda loc: self.manhattanFromPacman(*loc)
+            state.getFood().asList(),
+            key=lambda loc: self.manhattanFromPacman(*loc, state=state)
         )
 
-    def getClosestGhostToPacman(self):
+    def getClosestGhostToPacman(self, state=None):
         """Return the (x, y) coordinate of the closest ghost on the board."""
+        if state is None:
+            state = self.gameState
         return min(
-            self.gameState.getGhostPositions(),
-            key=lambda loc: len(self.pathfindFromPacman(*loc))
+            state.getGhostPositions(),
+            key=lambda loc: len(self.pathfindFromPacman(*loc, state=state))
         )
 
-    def getScaredGhosts(self):
+    def getScaredGhosts(self, state=None):
+        if state is None:
+            state = self.gameState
         return [
-            self.gameState.getGhostPosition(i)
-            for i in range(1, self.gameState.getNumAgents())
-            if self.gameState.getGhostState(i).scaredTimer > 0
+            state.getGhostPosition(i)
+            for i in range(1, state.getNumAgents())
+            if state.getGhostState(i).scaredTimer > 0
         ]
 
-    def getClosestScaredGhostToPacman(self):
+    def getClosestScaredGhostToPacman(self, state=None):
         """Return the (x, y) coordinate of the closest scared ghost on the
         board. Errors if there aren't any, so check getScaredGhosts first."""
         # List of positions of all ghosts
+        if state is None:
+            state = self.gameState
         return min(
-            self.getScaredGhosts(),
-            key=lambda loc: len(self.pathfindFromPacman(*loc))
+            self.getScaredGhosts(state),
+            key=lambda loc: len(self.pathfindFromPacman(*loc, state=state))
         )
 
-    def getClosestCapsuleToPacman(self):
+    def getClosestCapsuleToPacman(self, state=None):
         """Return the (x, y) coordinate of the geographically closest ghost on
         the board."""
+        if state is None:
+            state = self.gameState
         return min(
-            self.gameState.getCapsules(),
-            key=lambda loc: len(self.pathfindFromPacman(*loc))
+            state.getCapsules(),
+            key=lambda loc: len(self.pathfindFromPacman(*loc, state=state))
         )
 
-    def getOptimalCapsulePosition(self):
+    def getOptimalCapsulePosition(self, state=None):
         """If both pacman and a ghost are near a capsule, return the position of
         that capsule. Otherwise, return None."""
-        capsulePositions = self.gameState.getCapsules()
-        ghostPositions = self.gameState.getGhostPositions()
+        if state is None:
+            state = self.gameState
+        capsulePositions = state.getCapsules()
+        ghostPositions = state.getGhostPositions()
 
         # Build a list of places where pacman, a ghost, and a capsule are all
         # within 5 spaces of eachother. Includes the ghost and capsule
@@ -478,9 +497,11 @@ class Test7PacmanAgent(MultiAgentSearchAgent):
         for gp in ghostPositions:
             for cp in capsulePositions:
                 # Is the ghost within 10 spaces of the capsule
-                ghostCapsulePass = len(self.pathfind(gp, cp)) < 10
+                ghostCapsulePass = len(self.pathfind(gp, cp, state)) < 10
                 # Is pacman within 10 spaces of the capsule
-                pacmanCapsulePass = len(self.pathfindFromPacman(*cp)) < 10
+                pacmanCapsulePass = len(
+                    self.pathfindFromPacman(*cp, state=state)
+                ) < 10
                 # Is pacman within 10 spaces of the ghost
                 # pacmanGhostPass = len(self.pathfindFromPacman(*gp)) < 10
                 # If all 3 are within 5 of eachother
@@ -491,12 +512,14 @@ class Test7PacmanAgent(MultiAgentSearchAgent):
         else:
             return workingCombos[0][1]
 
-    def getActionToCoords(self, coords):
+    def getActionToCoords(self, coords, state=None):
         """Get the action that moves pacman to the provided coordinates.
         Coordinates should be valid path coordinates that are directly
         adjacent to pacman."""
+        if state is None:
+            state = self.gameState
         goalX, goalY = coords
-        pacX, pacY = self.gameState.getPacmanPosition()
+        pacX, pacY = state.getPacmanPosition()
 
         if (pacX - 1 == goalX and pacY == goalY):
             return Directions.WEST
@@ -511,11 +534,13 @@ class Test7PacmanAgent(MultiAgentSearchAgent):
                 "No action leads pacman directly to {0}".format(coords)
             )
 
-    def getActionTowards(self, coords):
+    def getActionTowards(self, coords, state=None):
         """Get the action that takes pacman towards the provided coordinates"""
-        pathToFood = [x.id for x in self.pathfindFromPacman(*coords)]
-        firstStep = pathToFood[1]  # index 0 is pacman
-        return self.getActionToCoords(firstStep)
+        if state is None:
+            state = self.gameState
+        pathTo = [x.id for x in self.pathfindFromPacman(*coords, state=state)]
+        firstStep = pathTo[1]  # index 0 is pacman's position
+        return self.getActionToCoords(firstStep, state)
 
     def getAction(self, gameState):
         """Decide which action pacman should take"""
