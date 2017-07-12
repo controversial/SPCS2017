@@ -547,6 +547,26 @@ class Test7PacmanAgent(MultiAgentSearchAgent):
         firstStep = pathTo[1]  # index 0 is pacman's position
         return self.getActionToCoords(firstStep, state)
 
+    def getActionAwayFrom(self, coords, state=None):
+        if state is None:
+            state = self.gameState
+        """Get the action that takes pacman away from the provided
+        coordinates"""
+        possibleMoves = state.getLegalActions(0)
+        pacX, pacY = state.getPacmanPosition()
+        distanceFromCoords = len(self.pathfindFromPacman(*coords, state=state))
+        for move in possibleMoves:
+            newState = state.generateSuccessor(0, move)
+            newDistanceFromCoords = len(
+                self.pathfindFromPacman(*coords, state=state)
+            )
+            if newDistanceFromCoords > distanceFromCoords:
+                return move
+        else:
+            return random.choice(
+                list(set(possibleMoves) - set(Directions.STOP))
+            )
+
     def getAction(self, gameState):
         """Decide which action pacman should take"""
         self.gameState = gameState
@@ -566,13 +586,22 @@ class Test7PacmanAgent(MultiAgentSearchAgent):
 
         # Decisions!
         optcap = self.getOptimalCapsulePosition()
-        if len(self.getScaredGhosts()) > 0:
+
+        # There's a nearby ghost - run
+        nonScaredGhost = self.getClosestNonScaredGhostToPacman()
+        if nonScaredGhost and len(self.pathfindFromPacman(*nonScaredGhost)) < 5:
+            print("Avoiding ghost", end="")
+            answer = self.getActionAwayFrom(nonScaredGhost)
+        # There's a scared ghost on the board - chase
+        elif len(self.getScaredGhosts()) > 0:
             print("Pathfinding to closest scared ghost", end="")
             closestScared = self.getClosestScaredGhostToPacman()
             answer = self.getActionTowards(closestScared)
+        # Pacman and a ghost are both close to a capsule: target capsule
         elif optcap:
             print("Pathfinding towards pellet to eat proximate ghost", end="")
             answer = self.getActionTowards(optcap)
+        # Otherwise idly aim for any food on the board
         else:
             print("Pathfinding towards closest food", end="")
             answer = self.getActionTowards(self.getClosestFoodToPacman())
