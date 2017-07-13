@@ -306,6 +306,7 @@ class Test7PacmanAgent(Agent):
             action = counterclockwiseActions[action]
             tries += 1
             if tries > 4:
+                print("... SUICIDE")
                 return actionTowardsGhost  # If trapped, don't waste time
         return action
 
