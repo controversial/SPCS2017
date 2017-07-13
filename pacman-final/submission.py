@@ -301,8 +301,12 @@ class Test7PacmanAgent(Agent):
         actionTowardsGhost = self.getActionTowards(coords)
         idealAction = oppositeActions[actionTowardsGhost]
         action = idealAction
+        tries = 0
         while (action not in possibleMoves) or (action == actionTowardsGhost):
             action = counterclockwiseActions[action]
+            tries += 1
+            if tries > 4:
+                return actionTowardsGhost  # If trapped, don't waste time
         return action
 
     def getAction(self, gameState):
